@@ -25,7 +25,7 @@
 {% if history|length < 1 %}
         <h3 style="text-align: center; padding-top: 5%;">You have no Songs in your History</h3>
 {% endif %}
-<div class="container my-5">
+{% comment %} <div class="container my-5">
   <div class="row">
     {% for i in history reversed %}
     <div class="col-12 col-md-6 mb-4 d-flex justify-content-center">
@@ -52,6 +52,67 @@
     </div>
     {% endfor %}
   </div>
+</div> {% endcomment %}
+<div class="container my-5">
+  <div class="row">
+    {% for i in history reversed %}
+    <div class="col-12 col-md-6 mb-4 d-flex justify-content-center">
+      <div class="card shadow-lg border-0 w-100 song-card">
+        <div class="row g-0">
+          
+          <!-- Image Section -->
+          <div class="col-5">
+            <img src="/media/{{ i.image }}" 
+                 class="img-fluid h-100 w-100" 
+                 style="object-fit: cover;" 
+                 alt="{{ i.name }}">
+          </div>
+          
+          <!-- Content Section -->
+          <div class="col-7 bg-light">
+            <div class="card-body px-3 py-3 h-100">
+              <h5 class="card-title mb-2" style="color: #2ecc71; font-weight: 600;">{{ i.name }}</h5>
+              <p class="card-text mb-1"><strong>Tags:</strong> {{ i.tags }}</p>
+              <p class="card-text mb-3"><strong>Movie:</strong> {{ i.movie }}</p>
+              <a href="/musicbeats/songs/{{ i.song_id }}" class="btn btn-outline-success w-100">
+                🎵 Listen
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
 </div>
+
+<style>
+/* Card Styling */
+.song-card {
+  max-width: 600px;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+/* Compact Mobile View */
+@media (max-width: 576px) {
+  .song-card {
+    max-width: 95%;
+  }
+  .song-card img {
+    height: 120px;   /* small image */
+  }
+  .song-card .card-body {
+    padding: 10px;
+  }
+  .song-card .card-title {
+    font-size: 15px;
+  }
+  .song-card .card-text {
+    font-size: 13px;
+  }
+}
+</style>
 
 {% endblock %}

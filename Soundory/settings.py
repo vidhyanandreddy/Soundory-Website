@@ -14,10 +14,6 @@ from pathlib import Path
 import os
 from pathlib import Path
 
-
-
-
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
