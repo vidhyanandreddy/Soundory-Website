@@ -1,4 +1,204 @@
-{%extends 'musicbeats/basic.html'%}
+{% extends 'musicbeats/basic.html' %}
+{% block title %}All Songs{% endblock %}
+
+{% block body %}
+{% load static %} 
+
+<style>
+  /* Animations */
+  @keyframes bounce-down {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(5px); }
+  }
+  .bounce-down { display: inline-block; animation: bounce-down 1.2s infinite; }
+
+  @keyframes pulse {
+    0%,100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+  }
+  .pulse { display: inline-block; animation: pulse 1.5s ease-in-out infinite; }
+
+  /* Glassmorphism Card */
+  .glass-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px);
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.2);
+    padding: 20px;
+    position: relative;
+    transition: transform 0.3s, box-shadow 0.3s;
+    max-width: 450px;  /* Limit width on desktop */
+    margin: auto;      /* Center card */
+  }
+  .glass-card:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  }
+
+  /* Song Image */
+  .song-img {
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    object-fit: cover;
+    width: 100%;
+    max-height: 300px;
+  }
+
+  /* Gradient Badge */
+  .tag-badge {
+    background: linear-gradient(45deg, #63E6BE, #10B981);
+    color: white;
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 500;
+  }
+
+  /* Action Buttons */
+  .action-btn i {
+    transition: transform 0.3s, color 0.3s;
+  }
+  .action-btn:hover i {
+    transform: scale(1.4) rotate(-10deg);
+    color: #10B981;
+  }
+
+ .play-btn {
+    position: fixed;          /* Float over content */
+    bottom: 300px;             /* Above bottom nav */
+    right: 30px;              /* Right side */
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #63E6BE, #2c3e50);
+    border-radius: 50%;       /* Circle button */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    cursor: pointer;
+    z-index: 1050;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.play-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+}
+
+.play-btn i {
+    font-size: 28px;
+    color: white;
+    transition: transform 0.2s;
+}
+
+.play-btn:active i {
+    transform: scale(0.9);
+}
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .glass-card { padding: 15px; max-width: 95%; }
+    .song-img { max-height: 250px; }
+    .play-btn { padding: 12px; font-size: 1.5rem; }
+  }
+</style>
+
+{% if message %}
+<script>
+  Swal.fire({
+    position: 'top-end',
+    icon: 'success',
+    title: '{{ message }}',
+    showConfirmButton: false,
+    timer: 1500
+  })
+</script>
+{% endif %}
+
+<div class="container py-5">
+  <div class="row justify-content-center">
+
+    <!-- Song Card -->
+    <div class="col-12 col-md-6 col-lg-5 glass-card text-center">
+
+      <!-- Song Image -->
+      <img src="/media/{{ song.image }}" alt="{{ song.name }}" class="song-img mb-3">
+
+      <!-- Floating Play Button -->
+      <span class="play-btn" onclick="togglePlay()">
+        <i id="playIcon" class="fa-solid fa-circle-play"></i>
+      </span>
+
+      <!-- Song Info -->
+      <h2 class="fw-bold text-success text-truncate mb-2" title="{{ song.name }}">🎵 {{ song.name }}</h2>
+      <p class="mb-1"><strong>Category:</strong> <span class="tag-badge">{{ song.tags }}</span></p>
+      <p class="mb-1"><strong>Movie:</strong> {{ song.movie }}</p>
+      <p class="mb-3"><strong>Singer:</strong> {{ song.singer }}</p>
+
+      <!-- Audio Player -->
+      <audio id="audioPlayer" class="w-90 mb-3" src="/media/{{ song.song }}" controls></audio>
+
+      <!-- Action Buttons -->
+      <div class="d-flex justify-content-center flex-wrap gap-3">
+
+        <!-- Watch Later -->
+        <form action="{% url 'watchlater' %}" method="POST">
+          {% csrf_token %}
+          <input type="hidden" name="video_id" value="{{ song.song_id }}">
+          <button type="submit" class="btn action-btn">
+            {% if song.song_id in watchlater_ids %}
+              <i class="fa-solid fa-circle-check fa-2xl" style="color: #0b61a3ff;"></i>
+            {% else %}
+              <i class="fa-solid fa-circle-plus fa-2xl" style="color: #0b61a3ff;"></i>
+            {% endif %}
+          </button>
+        </form>
+
+        <!-- Download -->
+        <a href="/media/{{ song.song }}" download class="btn action-btn" title="Download">
+          <i class="fa-regular fa-circle-down fa-2xl" style="color: #0b61a3ff;"></i>
+        </a>
+
+        <!-- Like -->
+        <form action="{% url 'liked' %}" method="POST">
+          {% csrf_token %}
+          <input type="hidden" name="video_id" value="{{ song.song_id }}">
+          <button type="submit" class="btn action-btn">
+            {% if song.song_id in liked_ids %}
+              <i class="fa-solid fa-heart fa-2xl" style="color: #e20808;"></i>
+            {% else %}
+              <i class="fa-regular fa-heart fa-2xl" style="color: #e20808;"></i>
+            {% endif %}
+          </button>
+        </form>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+function togglePlay() {
+  const audio = document.getElementById("audioPlayer");
+  const icon = document.getElementById("playIcon");
+  if(audio.paused) {
+    audio.play();
+    icon.classList.remove('fa-circle-play');
+    icon.classList.add('fa-circle-pause');
+  } else {
+    audio.pause();
+    icon.classList.remove('fa-circle-pause');
+    icon.classList.add('fa-circle-play');
+  }
+}
+</script>
+
+{% endblock %}
+{% block js %}{% endblock %}
+
+
+{% comment %} {%extends 'musicbeats/basic.html'%}
 {% block title%}All Songs{% endblock %}
 
 
@@ -108,26 +308,4 @@
 {% block js %}
 
 {% endblock%}
-
-
-
-<!-- Download -->
-          {% comment %} <a href="/media/{{ song.song }}" download>
-            <button class="btn btn-outline-success ml-2">Download <span class="bounce-down">⬇️</span></button>
-          </a> {% endcomment %}
-
-
-           {% comment %} <!-- Like -->
-          <form action="/musicbeats/liked/" method="POST">
-            {% csrf_token %}
-            <input type="hidden" name="video_id" value="{{ song.song_id }}">
-            <button type="submit" class="btn btn-outline-primary ml-2">❤️ Like</button>
-          </form> {% endcomment %}
-
-
-          <!-- Watch Later -->
-          {% comment %} <form action="/musicbeats/watchlater/" method="POST">
-            {% csrf_token %}
-            <input type="hidden" name="video_id" value="{{ song.song_id }}">
-            <button type="submit" class="btn btn-outline-danger">➕ Add to Playlist</button>
-          </form> {% endcomment %}
+ {% endcomment %}

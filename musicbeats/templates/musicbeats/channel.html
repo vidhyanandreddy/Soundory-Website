@@ -1,10 +1,83 @@
-{%extends 'musicbeats/basic.html'%}
+{% extends 'musicbeats/basic.html' %}
+{% block title %}Your channel{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h3 class="mt-4 mb-3 text-center" style="font-family: 'Segoe UI'; font-weight: bold;">
+        Your Channel: {{ channel.name }} in <span style="color: #ff4d6d;">Soundory</span>
+    </h3>
+</div>
+
+<div class="container text-center mb-4">
+    <a href="/musicbeats/upload" class="btn btn-outline-primary px-4">
+      ⬆ Upload Song
+    </a>
+</div>
+
+
+
+<div class="container">
+  {% for i in song reversed %}
+    <div class="song-list-card d-flex align-items-center p-3 mb-3 shadow-sm">
+      <!-- Thumbnail -->
+      <img src="/media/{{ i.image }}" class="song-list-img me-3" alt="{{ i.name }}">
+      
+      <!-- Details -->
+      <div class="flex-grow-1">
+        <h5 class="mb-1 ml-2 fw-bold">{{ i.name }}</h5>
+        <small class="text-muted ml-2">🎬 {{ i.movie }} | 🎼 {{ i.tags }}</small>
+      </div>
+
+      <!-- Action -->
+      <div>
+        {% if user.is_authenticated %}
+          <form action="/musicbeats/history" method="POST" class="m-0">
+            {% csrf_token %}
+            <input type="hidden" name="music_id" value="{{ i.song_id }}">
+            <button type="submit" class="btn btn-outline-success">
+              Listen
+            </button>
+          </form>
+        {% else %}
+          <a href="/musicbeats/songs/{{ i.song_id }}" class="btn btn-outline-danger btn-sm rounded-circle">
+            Listen
+          </a>
+        {% endif %}
+      </div>
+    </div>
+  {% endfor %}
+</div>
+
+<!-- Custom Styles -->
+<style>
+  .song-list-card {
+    border-radius: 15px;
+    background: #ffffff;
+    transition: background 0.3s ease, transform 0.2s ease;
+  }
+  .song-list-card:hover {
+    background: #fff0f4; 
+    transform: translateY(-3px);
+  }
+  .song-list-img {
+    width: 75px;
+    height: 75px;
+    object-fit: cover;
+    border-radius: 12px;
+  }
+</style>
+{% endblock %}
+
+
+{% comment %} {%extends 'musicbeats/basic.html'%}
 {% block title%}Your channel{% endblock %}
 
 {% block body %}
-
-<h2 style="text-align: center; padding-top: 2%; color: rgb(218, 16, 16);">Channel: {{channel.name}}</h2>
-
+<div class="container">
+        <h3 class="mt-4 mb-3 ps-4 text-center" style="font-family: 'Segoe UI'; font-weight: bold;">
+          Your Channel: {{channel.name}} in <span style="color: #ff4d6d;">Soundory</span>
+        </h3>
+    </div>
 <div class="container">
 {% for i in song reversed %}
 <div class="card mb-3" style="max-width: 940px; padding-top: 0%;">
@@ -34,4 +107,4 @@
 </div>
 
 
-{% endblock %}
+{% endblock %} {% endcomment %}

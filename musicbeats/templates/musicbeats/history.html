@@ -20,8 +20,11 @@
   }
   
 </style> 
-<h1 style="color: rgb(158, 60, 60); text-align: center;" class="title mt-3">History</h1>
-
+<div class="container">
+        <h3 class="mt-4 mb-3 ps-4 text-center" style="font-family: 'Segoe UI'; font-weight: bold;">
+          Your History in <span style="color: #ff4d6d;">Soundory</span>
+        </h3>
+    </div>
 {% if history|length < 1 %}
         <h3 style="text-align: center; padding-top: 5%;">You have no Songs in your History</h3>
 {% endif %}
@@ -53,7 +56,7 @@
     {% endfor %}
   </div>
 </div> {% endcomment %}
-<div class="container my-5">
+<div class="container my-2">
   <div class="row">
     {% for i in history reversed %}
     <div class="col-12 col-md-6 mb-4 d-flex justify-content-center">

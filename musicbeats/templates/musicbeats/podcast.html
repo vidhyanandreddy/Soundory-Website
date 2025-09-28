@@ -4,15 +4,15 @@
 {% block body %}
     {% load static %}
     <div class="container">
-        <h2 class="mt-4 mb-3 ps-4" style="font-family: 'Segoe UI'; font-weight: bold;">
-          🎵 Explore All Podcasts on <span style="color: #ff4d6d;">Soundory</span>
-        </h2>
+        <h3 class="mt-4 mb-3 ps-4 text-center" style="font-family: 'Segoe UI'; font-weight: bold;">
+          Podcasts on <span style="color: #ff4d6d;">Soundory</span>
+        </h3>
     </div>
 
 
         {% load static %}
-        <div class="container py-5">
-          <h2 class="text-center mb-5" style="color: #198754;">🎙️ Featured Podcasts</h2>
+        <div class="container py-2">
+          {% comment %} <h2 class="text-center mb-5" style="color: #198754;">🎙️ Featured Podcasts</h2> {% endcomment %}
         
           <div class="row row-cols-1 row-cols-md-3 g-4">
             {% for podcast in podcasts %}

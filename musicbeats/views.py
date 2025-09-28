@@ -281,7 +281,23 @@ def profile(request):
     return render(request, 'profile.html', {'u_form': u_form})
 @login_required(login_url='/musicbeats/login/')
 def index(request):
-    song = Song.objects.all()[0:5]
+    song = Song.objects.all()[0:8]
+    
+    if request.method == "POST":
+        user = request.user
+        music_id = request.POST['music_id']
+        history = History(user=user, music_id=music_id)
+        history.save()
+
+        return redirect(f"/musicbeats/songs/{music_id}")
+
+    history = History.objects.filter(user=request.user)
+    ids = []
+    for i in history:
+        ids.append(i.music_id)
+    
+    preserved = Case(*[When(pk=pk, then=pos) for pos, pk in enumerate(ids)])
+    songss = Song.objects.filter(song_id__in=ids).order_by(preserved)
 
     # Default values
     # watch = Song.objects.all()
@@ -301,6 +317,6 @@ def index(request):
         preserved = Case(*[When(pk=pk, then=pos) for pos, pk in enumerate(liked_ids)])
         likes_qs = Song.objects.filter(song_id__in=liked_ids).order_by(preserved)
         user_likes = reversed(likes_qs)
-    
-    
-    return render(request, 'index.html', {'song': song, 'watch': watch, 'user_likes': user_likes})
+
+
+    return render(request, 'index.html', {'song': song, 'watch': watch, 'user_likes': user_likes,'history': songss})

@@ -2,77 +2,60 @@
 {% block title%}All Songs{% endblock %}
 
 {% block body %}
-{% comment %} <div class="container">
+<!-- Custom Styles -->
+<style>
+  .song-list-card {
+    border-radius: 15px;
+    background: #ffffff;
+    transition: background 0.3s ease, transform 0.2s ease;
+  }
+  .song-list-card:hover {
+    background: #fff0f4; 
+    transform: translateY(-3px);
+  }
+  .song-list-img {
+    width: 75px;
+    height: 75px;
+    object-fit: cover;
+    border-radius: 12px;
+  }
+</style>
+<div class="container my-3">
+  <div class="mb-4" style="font-size: 1.4rem; color: grey; font-weight: 500;">
+    🔍 Your Search Result for <span style="color:#ff4d6d;">{{ query }}</span>:
+  </div>
 
-    <div style=" padding-top:3%; padding-bottom:2%; font-size:150%; color:grey;">
-        Your Search Result for {{query}}:
-    </div>
-
-{% for i in songs reversed %}
-<div class="card mb-3" style="max-width: 940px; padding-top: 0%;">
-    <div class="row no-gutters">
-      <div class="col-md-4">
-        <img src="/media/{{i.image}}" class="card-img" alt="...">
+  <div class="container">
+  {% for i in songs reversed %}
+    <div class="song-list-card d-flex align-items-center p-3 mb-3 shadow-sm">
+      <!-- Thumbnail -->
+      <img src="/media/{{ i.image }}" class="song-list-img me-3" alt="{{ i.name }}">
+      
+      <!-- Details -->
+      <div class="flex-grow-1">
+        <h5 class="mb-1 ml-2 fw-bold">{{ i.name }}</h5>
+        <small class="text-muted ml-2">🎬 {{ i.movie }} | 🎼 {{ i.tags }}</small>
       </div>
-      <div class="col-md-8">
-        <div class="card-body">
-          <h5 class="card-title" style="color: green; font-weight: 550;">{{i.name}}</h5>
-          <p class="card-text">Tags: {{i.tags}}</p>
-        <p class="card-text">Movie: {{i.movie}}</p>
+
+      <!-- Action -->
+      <div>
         {% if user.is_authenticated %}
-        <form action="/musicbeats/history" method="POST">
-          {% csrf_token %}
-          <input type="hidden" name="music_id" value="{{i.song_id}}">
-          <a href="/musicbeats/songs/{{i.song_id}}"><button class="btn btn-outline-danger">Listen Song</button></a>
-        </form>
+          <form action="/musicbeats/history" method="POST" class="m-0">
+            {% csrf_token %}
+            <input type="hidden" name="music_id" value="{{ i.song_id }}">
+            <button type="submit" class="btn btn-outline-success">
+              Listen
+            </button>
+          </form>
         {% else %}
-        <a href="/musicbeats/songs/{{i.song_id}}"><button class="btn btn-outline-danger">Listen Song</button></a>
+          <a href="/musicbeats/songs/{{ i.song_id }}" class="btn btn-outline-danger btn-sm rounded-circle">
+            Listen
+          </a>
         {% endif %}
-        </div>
       </div>
     </div>
-  </div>
   {% endfor %}
-</div> {% endcomment %}
-
-<div class="container my-5">
-  <div style=" padding-top:3%; padding-bottom:2%; font-size:150%; color:grey;">
-    Your Search Result for {{query}}:
 </div>
 
-  <div class="row">
-    {% for i in songs reversed %}
-    <div class="col-12 col-md-6 mb-4 d-flex justify-content-center">
-      <div class="card shadow-lg border-0 w-100" style="max-width: 600px; border-radius: 20px; overflow: hidden;">
-        <div class="row g-0">
-          
-          <!-- Image Section -->
-          <div class="col-12 col-sm-5">
-            <img src="/media/{{ i.image }}" class="img-fluid h-100 w-100" style="object-fit: cover;" alt="{{ i.name }}">
-          </div>
-          
-          <!-- Content Section -->
-          <div class="col-12 col-sm-7 bg-light">
-            <div class="card-body px-3 py-3 h-100">
-              <h5 class="card-title mb-2" style="color: #2ecc71; font-weight: 600;">{{ i.name }}</h5>
-              <p class="card-text mb-1"><strong>Tags:</strong> {{ i.tags }}</p>
-              <p class="card-text mb-3"><strong>Movie:</strong> {{ i.movie }}</p>
-              {% if user.is_authenticated %}
-              <form action="/musicbeats/history" method="POST">
-                {% csrf_token %}
-                <input type="hidden" name="music_id" value="{{ i.song_id }}">
-                <button type="submit" class="btn btn-outline-success btn-sm w-100 ">🎵 Listen Song</button>
-              </form>
-              {% else %}
-              <a href="/musicbeats/songs/{{ i.song_id }}" class="btn btn-outline-success btn-sm w-100">🎵 Listen Song</a>
-              {% endif %}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    {% endfor %}
-  </div>
-</div>
 {% endblock %}
 
