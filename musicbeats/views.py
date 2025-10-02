@@ -281,7 +281,12 @@ def profile(request):
     return render(request, 'profile.html', {'u_form': u_form})
 @login_required(login_url='/musicbeats/login/')
 def index(request):
-    song = Song.objects.all()[0:8]
+    song = Song.objects.all()[6:]
+    song = reversed(song)
+    # latest_songs = Song.objects.order_by('-created_at')[8:]
+    love_songs = Song.objects.filter(tags__icontains="Love Song").order_by('-created_at').all()
+    love_songs = reversed(love_songs)
+    
     
     if request.method == "POST":
         user = request.user
@@ -319,4 +324,4 @@ def index(request):
         user_likes = reversed(likes_qs)
 
 
-    return render(request, 'index.html', {'song': song, 'watch': watch, 'user_likes': user_likes,'history': songss})
+    return render(request, 'index.html', {'song': song, 'watch': watch, 'user_likes': user_likes,'history': songss,'love_songs': love_songs})

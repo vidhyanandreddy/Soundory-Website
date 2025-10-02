@@ -25,6 +25,10 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+SESSION_COOKIE_AGE = 1209600  # Session lasts for 2 weeks (in seconds)
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+SESSION_SAVE_EVERY_REQUEST = True
+
 
 # Application definition
 
@@ -48,6 +52,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 
 ROOT_URLCONF = 'Soundory.urls'
 

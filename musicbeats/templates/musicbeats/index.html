@@ -22,7 +22,7 @@
     padding-left: 7%;
     font-family: 'Segoe UI', sans-serif;
     font-weight: bold;
-    font-size: 1.8rem;
+    font-size: 1.5rem;
     color: #222;
   }
 
@@ -77,7 +77,7 @@
   }
 
   .scroll-x::-webkit-scrollbar-thumb {
-    background: #F59E0B;
+    background: success;
     border-radius: 3px;
   }
 
@@ -96,9 +96,9 @@
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);">
   <div class="container">
     
-    <h1 class="display-3 fw-bold mb-3" style="font-family: 'Segoe UI', sans-serif;">
+    <h2 class="display-3 fw-bold mb-3" style="font-family: 'Segoe UI', sans-serif;">
       <span class="shake">🎵</span> Welcome to <span style="color: #1DB954;">Soundory</span>
-    </h1>
+    </h2>
     <p class="hero-subtitle mb-4">Music. Reimagined with Soundory.</p>
 
     <!-- 🔍 Search Bar -->
@@ -110,9 +110,9 @@
 </div>
 
 <!-- 🔥 TRENDING SONGS -->
-<h2 class="section-title mt-4 mb-3">
+<h4 class="section-title mt-4 mb-3">
   <i class="fa-slab fa-solid fa-music shake" style="color: #63E6BE;"></i> Trending Songs
-</h2>
+</h4>
 
 <div class="container-fluid px-3">
   <div class="d-flex flex-row overflow-auto pb-3 scroll-x" style="gap: 12px; scroll-snap-type: x mandatory;">
@@ -130,10 +130,30 @@
   </div>
 </div>
 <hr>
+
+<h4 class="section-title mt-4 mb-3">
+  <i class="fa-slab fa-solid fa-music shake" style="color: #63E6BE;"></i> Love Songs
+</h4>
+
+<div class="container-fluid px-3">
+  <div class="d-flex flex-row overflow-auto pb-3 scroll-x" style="gap: 12px; scroll-snap-type: x mandatory;">
+    {% for song in love_songs %}
+    <div class="card flex-shrink-0 shadow-sm" style="width: 160px; border-radius: 10px; scroll-snap-align: start;">
+      <img src="/media/{{ song.image }}" class="card-img-top" style="height: 120px; object-fit: cover; border-radius: 10px;">
+      <div class="card-body p-2 bg-white text-center" style="border-radius: 0 0 10px 10px;">
+        <h6 class="card-title text-truncate" title="{{ song.name }}">{{ song.name }}</h6>
+        <p class="card-text text-truncate mb-1" style="font-size: 0.8rem;">🎬 {{ song.movie }}</p>
+        <a href="/musicbeats/songs/{{ song.song_id }}" class="btn btn-sm btn-outline-success w-100" style="font-size: 0.75rem;">🎧 Listen</a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+<hr>
 <!-- 🔥 RECENTLY PLAYED SONGS -->
-<h2 class="section-title mt-4 mb-3">
+<h4 class="section-title mt-4 mb-3">
   <i class="fa-solid fa-clock-rotate-left shake" style="color: #F59E0B;"></i> Recently Played
-</h2>
+</h4>
 
 <div class="container-fluid px-3">
   <div class="d-flex flex-row overflow-auto pb-3 scroll-x" style="gap: 12px; scroll-snap-type: x mandatory;">
@@ -159,9 +179,9 @@
 
 <hr>
 <!-- 🎧 YOUR PLAYLIST -->
-<h3 class="section-title mt-4 mb-3">
+<h4 class="section-title mt-4 mb-3">
   <span class="shake">🎧</span> Your Playlist Songs
-</h3>
+</h4>
 
 <div class="container-fluid px-3">
   <div class="d-flex flex-row overflow-auto pb-3 scroll-x" style="gap: 12px; scroll-snap-type: x mandatory;">
@@ -185,9 +205,9 @@
 <hr>
 
 <!-- ❤️ LIKED SONGS -->
-<h3 class="section-title mt-4 mb-3">
+<h4 class="section-title mt-4 mb-3">
   <span class="pulse">❤️</span> Your Liked Songs
-</h3>
+</h4>
 
 <div class="container-fluid px-3">
   <div class="d-flex flex-row overflow-auto pb-3 scroll-x" style="gap: 12px; scroll-snap-type: x mandatory;">

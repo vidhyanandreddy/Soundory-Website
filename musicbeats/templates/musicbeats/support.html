@@ -1,4 +1,79 @@
-{%extends 'musicbeats/basic.html'%}
+{% extends 'musicbeats/basic.html' %}
+{% block title %}Support{% endblock %}
+
+{% block body %}
+{% load static %}
+
+<div class="container mt-5">
+  <h2 class="mb-4 text-center">Help & Support</h2>
+
+  <!-- Django messages display -->
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} text-center">
+        {{ message }}
+      </div>
+    {% endfor %}
+  {% endif %}
+
+  <!-- Horizontal Support Card -->
+  <div class="card shadow rounded bg-light">
+    <div class="row g-0">
+      
+      <!-- Left side (image/info) -->
+      <div class="col-md-5 d-flex align-items-center justify-content-center bg-primary text-white p-4 rounded-start">
+        <div class="text-center">
+          <img src="/media/MusicLogo.jpg" alt="Support" class="img-fluid mb-3" style="max-height: 150px;">
+          <h4>We’re here to help</h4>
+          <p class="mb-0">Fill in the form and our support team will get back to you.</p>
+        </div>
+      </div>
+
+      <!-- Right side (form) -->
+      <div class="col-md-7 p-4">
+        <form method="POST" action="{% url 'support_submit' %}" enctype="multipart/form-data">
+          {% csrf_token %}
+
+          <div class="mb-3">
+            <label for="name" class="form-label">👤 Your Name</label>
+            <input type="text" id="name" name="name" class="form-control" placeholder="e.g. John Doe" required>
+          </div>
+
+          <div class="mb-3">
+            <label for="email" class="form-label">📧 Your Email</label>
+            <input type="email" id="email" name="email" class="form-control" placeholder="e.g. john@example.com" required>
+          </div>
+
+          <div class="mb-3">
+            <label for="message" class="form-label">💬 Message</label>
+            <textarea id="message" name="message" rows="4" class="form-control" placeholder="Type your message here..." required></textarea>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">📎 Upload File (optional)</label>
+            <input type="file" name="file" class="form-control">
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">🖼️ Upload Image (optional)</label>
+            <input type="file" name="image" accept="image/*" class="form-control">
+          </div>
+
+          <button type="submit" class="btn btn-primary w-100">Send Message</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <p class="text-center mt-4 text-muted">
+    Need urgent help? Email us at <strong>support@soundory.com</strong>
+  </p>
+</div>
+
+{% endblock %}
+
+
+{% comment %} {%extends 'musicbeats/basic.html'%}
 {% block title%}Support{% endblock %}
 
 {% block body %}
@@ -53,4 +128,4 @@
   </p>
 </div>
 
-{% endblock %}
+{% endblock %} {% endcomment %}
